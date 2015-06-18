@@ -19,7 +19,11 @@ class ViewController: UIViewController {
     var activatedButtons = [UIButton]()
     var solutions = [String]()
     
-    var score = 0
+    var score: Int = 0 {
+        didSet {
+            scoreLabel.text = "Score: \(score)"
+        }
+    }
     var level = 1
     
     
@@ -84,11 +88,51 @@ class ViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    func letterTapped(btn: UIButton) {
+        currentAnswer.text = currentAnswer.text + btn.titleLabel!.text!
+        activatedButtons.append(btn)
+        btn.hidden = true
+    }
 
 
     @IBAction func clearTapped(sender: AnyObject) {
+        currentAnswer.text = ""
+        for btn in activatedButtons {
+            btn.hidden = false
+        }
+        
+        activatedButtons.removeAll()
+        
     }
     @IBAction func submitTapped(sender: AnyObject) {
+        if let solutionPosition = find(solutions, currentAnswer.text) {
+            activatedButtons.removeAll()
+            
+            var splitClues = answersLabel.text!.componentsSeparatedByString("\n")
+            splitClues[solutionPosition] = currentAnswer.text
+            answersLabel.text = join("\n", splitClues)
+            
+            currentAnswer.text = ""
+            ++score
+            
+            if score % 7 == 0 {
+                let ac = UIAlertController(title: "Well done!", message: "Are you ready for the next level?", preferredStyle: .Alert)
+                ac.addAction(UIAlertAction(title: "Let's go!", style: .Default, handler: levelUp))
+                presentViewController(ac, animated: true, completion: nil)
+
+                
+            }
+        }
+    }
+    
+    func levelUp(action: UIAlertAction!) {
+        ++level
+        loadLevel()
+        
+        for btn in letterButtons {
+            btn.hidden = false
+        }
     }
     
 }
