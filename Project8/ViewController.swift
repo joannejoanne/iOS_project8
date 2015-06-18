@@ -20,6 +20,14 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
+    @IBOutlet weak var cluesLabel: UILabel!
 
+    @IBAction func clearTapped(sender: AnyObject) {
+    }
+    @IBAction func submitTapped(sender: AnyObject) {
+    }
+    @IBOutlet weak var scoreLabel: UILabel!
+    @IBOutlet weak var answersLabel: UILabel!
+    @IBOutlet weak var currentAnswer: UITextField!
 }
 
